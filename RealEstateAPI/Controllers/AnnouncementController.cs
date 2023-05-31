@@ -35,5 +35,23 @@ namespace Project.Controllers
         {
             throw new NotImplementedException();
         }
+
+        [HttpGet("{id}/comments")]
+        public IActionResult GetComments()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("{id}/comments")]
+        public IActionResult AddComment()
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpDelete("{id}/comments/{commentId}")]
+        public IActionResult DeleteComment()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
