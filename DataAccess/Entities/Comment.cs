@@ -4,8 +4,8 @@ namespace DataAccess.Entities
 {
     public class Comment : BaseEntity
     {
-        public User Poster { get; set; }
-        public Announcement Announcement { get; set; }
+        public virtual User? Poster { get; set; }
+        public virtual Announcement Announcement { get; set; }
         public string Message { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace DataAccess.Entities
         public string PostTitle { get; set; }
         public string PostDescription { get; set; }
 
-        public IEnumerable<Comment> Comments { get; set; }
+        public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }
