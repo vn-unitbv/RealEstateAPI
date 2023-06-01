@@ -1,8 +1,9 @@
 ﻿using Core.Dtos;
 using DataAccess.Entities;
-using DataLayer;
+using DataAccess;
 using Infrastructure.Exceptions;
 using Core.Extensions;
+using DataAccess.Enums;
 
 namespace Core.Services
 {
@@ -48,7 +49,7 @@ namespace Core.Services
                 LastName = registerData.LastName,
                 Email = registerData.Email,
                 PasswordHash = hashedPassword,
-                Role = DataAccess.Enums.UserRole.User
+                Role = UserRole.User
             };
 
             _unitOfWork.Users.Add(user);
