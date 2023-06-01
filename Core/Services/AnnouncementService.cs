@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Exceptions;
+using Core.Extensions;
 
 namespace Core.Services
 {
@@ -19,6 +20,16 @@ namespace Core.Services
 		{
 			_unitOfWork = unitOfWork;
 		}
+
+        // TODO add parameters for filtering
+        public async Task<List<FeedAnnouncementDto>> GetFeed()
+        {
+            var results = (await _unitOfWork.Announcements.GetAll())
+                .ToFeedAnnouncementDtos()
+                .ToList();
+
+            return results;
+        }
 
 		public async Task<Guid> AddAnnouncement(AddAnnouncementDto data, Guid userId)
 		{
