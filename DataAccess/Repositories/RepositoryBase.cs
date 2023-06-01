@@ -35,9 +35,9 @@ namespace DataAccess.Repositories
             _dbSet.Remove(entity);
         }
 
-        public List<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            return GetRecords().ToList();
+            return await _dbSet.ToListAsync();
         }
 
         protected IQueryable<T> GetRecords()
