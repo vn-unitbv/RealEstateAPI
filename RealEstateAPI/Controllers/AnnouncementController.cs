@@ -1,57 +1,74 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Dtos;
+using Core.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Project.Controllers
 {
-    [ApiController]
-    [Route("announcement")]
-    public class AnnouncementController : ControllerBase
-    {
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            throw new NotImplementedException();
-        }
+	[ApiController]
+	[Route("announcement")]
+	[Authorize]
+	public class AnnouncementController : ControllerBase
+	{
+		private readonly AnnouncementService _announcementService;
 
-        [HttpGet("{id}")]
-        public IActionResult Get()
-        {
-            throw new NotImplementedException();
-        }
+		public AnnouncementController(AnnouncementService announcementService)
+		{
+			_announcementService = announcementService;
+		}
 
-        [HttpPost]
-        public IActionResult Add()
-        {
-            throw new NotImplementedException();
-        }
+		[HttpGet]
+		public IActionResult GetAll()
+		{
+			throw new NotImplementedException();
+		}
 
-        [HttpPatch("{id}")]
-        public IActionResult Update()
-        {
-            throw new NotImplementedException();
-        }
+		[HttpGet("{id}")]
+		public IActionResult Get()
+		{
+			throw new NotImplementedException();
+		}
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete()
-        {
-            throw new NotImplementedException();
-        }
+		[HttpPost]
+		[Authorize(Roles = "User")]
+		public async Task<IActionResult> Add([FromBody] AddAnnouncementDto data)
+		{
+			Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
 
-        [HttpGet("{id}/comments")]
-        public IActionResult GetComments()
-        {
-            throw new NotImplementedException();
-        }
+			var id = await _announcementService.AddAnnouncement(data, userId);
 
-        [HttpPost("{id}/comments")]
-        public IActionResult AddComment()
-        {
-            throw new NotImplementedException();
-        }
+			return Ok(new { announcementId = id });
+		}
 
-        [HttpDelete("{id}/comments/{commentId}")]
-        public IActionResult DeleteComment()
-        {
-            throw new NotImplementedException();
-        }
-    }
+		[HttpPatch("{id}")]
+		public IActionResult Update()
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpDelete("{id}")]
+		public IActionResult Delete()
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpGet("{id}/comments")]
+		public IActionResult GetComments()
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpPost("{id}/comments")]
+		public IActionResult AddComment()
+		{
+			throw new NotImplementedException();
+		}
+
+		[HttpDelete("{id}/comments/{commentId}")]
+		public IActionResult DeleteComment()
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
