@@ -13,7 +13,7 @@ namespace Project.Settings
             applicationBuilder.Services.AddSwaggerGen();
 
             applicationBuilder.Services.AddDbContext<AppDbContext>();
-            applicationBuilder.Services.AddTransient<AppDbContext>();
+            applicationBuilder.Services.AddScoped<AppDbContext>();
 
             AddRepositories(applicationBuilder.Services);
             AddServices(applicationBuilder.Services);
