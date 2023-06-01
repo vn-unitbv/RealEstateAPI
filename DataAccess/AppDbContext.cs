@@ -1,8 +1,10 @@
 ﻿using DataAccess.Entities;
+using DataAccess.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
 
-namespace DataLayer
+namespace DataAccess
 {
 	public class AppDbContext : DbContext
 	{
@@ -28,6 +30,8 @@ namespace DataLayer
 				dob =>
 				{
 					dob.ToTable("Announcements");
+					dob.Property(o => o.Type)
+						.HasConversion(new EnumToStringConverter<RealEstateType>());
 				});
 
 			modelBuilder.Entity<Announcement>(
@@ -37,7 +41,13 @@ namespace DataLayer
 					ob.HasOne(o => o.RealEstate).WithOne()
 						.HasForeignKey<RealEstate>(o => o.Id);
 					ob.Navigation(o => o.RealEstate).IsRequired();
+					ob.Property(o => o.TransactionType)
+						.HasConversion(new EnumToStringConverter<TransactionType>());
 				});
+
+			modelBuilder.Entity<User>()
+				.Property(o => o.Role)
+					.HasConversion(new EnumToStringConverter<UserRole>());
 		}
 
 		public DbSet<User> Users { get; set; }
