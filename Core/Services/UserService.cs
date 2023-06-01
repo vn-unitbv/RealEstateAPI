@@ -15,6 +15,18 @@ namespace Core.Services
             _authService = authService;
         }
 
+        public async Task<List<UserDto>> GetAll()
+        {
+            var results = (await _unitOfWork.Users.GetAll()).Select(e => new UserDto()
+            {
+                FirstName = e.FirstName,
+                LastName = e.LastName,
+                Email = e.Email
+            }).ToList();
+
+            return results;
+        }
+
         public async Task Register(RegisterDto registerData)
         {
             var hashedPassword = _authService.HashPassword(registerData.Password);
@@ -25,10 +37,11 @@ namespace Core.Services
                 LastName = registerData.LastName,
                 Email = registerData.Email,
                 PasswordHash = hashedPassword,
+                Role = DataAccess.Enums.UserRole.User
             };
 
             _unitOfWork.Users.Add(user);
-           await _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         public async Task<string?> Validate(LoginDto payload)
