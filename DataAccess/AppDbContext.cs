@@ -15,7 +15,9 @@ namespace DataAccess
 				.AddJsonFile("appsettings.json")
 				.AddJsonFile("appsettings.Development.json")
 				.Build();
-			optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+			optionsBuilder
+                .UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
+                .UseLazyLoadingProxies();
 		}
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
