@@ -1,6 +1,8 @@
 ﻿using Core.Dtos;
 using DataAccess.Entities;
 using DataLayer;
+using Infrastructure.Exceptions;
+using Core.Extensions;
 
 namespace Core.Services
 {
@@ -25,6 +27,15 @@ namespace Core.Services
             }).ToList();
 
             return results;
+        }
+
+        public async Task<UserDto> GetUserById(Guid id)
+        {
+            var user = await _unitOfWork.Users.Get(id);
+            if (user == null)
+                throw new ResourceMissingException($"User with id {id} doesn't exist");
+
+            return user.ToUserDto();
         }
 
         public async Task Register(RegisterDto registerData)
