@@ -1,5 +1,5 @@
 ﻿using DataAccess.Entities;
-using DataLayer;
+using DataAccess;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories
@@ -22,7 +22,7 @@ namespace DataAccess.Repositories
 
         public void Add(T entity)
         {
-            _dbSet.Add(entity);
+            _dbSet.Attach(entity);
         }
 
         public void Update(T entity)

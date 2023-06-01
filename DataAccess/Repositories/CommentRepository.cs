@@ -1,5 +1,5 @@
 ﻿using DataAccess.Entities;
-using DataLayer;
+using DataAccess;
 
 namespace DataAccess.Repositories;
 
