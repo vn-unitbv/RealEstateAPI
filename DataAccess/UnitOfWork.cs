@@ -41,5 +41,22 @@ namespace DataLayer
                 Console.Error.WriteLine(errorMessage);
             }
         }
+
+        public async Task SaveChangesAsync()
+        {
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                var errorMessage = "Error when saving to the database: "
+                                   + $"{exception.Message}\n\n"
+                                   + $"{exception.InnerException}\n\n"
+                                   + $"{exception.StackTrace}\n\n";
+
+                Console.Error.WriteLine(errorMessage);
+            }
+        }
     }
 }
