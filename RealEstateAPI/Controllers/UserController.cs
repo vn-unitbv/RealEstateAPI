@@ -23,9 +23,11 @@ namespace Project.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get()
+        public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            throw new NotImplementedException();
+            var user = await _userService.GetUserById(id);
+
+            return Ok(user);
         }
 
         [HttpGet("{id}/announcements")]
