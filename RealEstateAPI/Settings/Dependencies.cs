@@ -1,6 +1,6 @@
 ﻿using Core.Services;
 using DataAccess.Repositories;
-using DataLayer;
+using DataAccess;
 
 namespace Project.Settings
 {
@@ -23,6 +23,7 @@ namespace Project.Settings
         {
             services.AddTransient<AuthorizationService>();
             services.AddTransient<UserService>();
+            services.AddTransient<AnnouncementService>();
         }
 
         private static void AddRepositories(IServiceCollection services)
