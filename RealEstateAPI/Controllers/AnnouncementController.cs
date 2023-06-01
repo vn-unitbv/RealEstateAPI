@@ -23,9 +23,11 @@ namespace Project.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            throw new NotImplementedException();
+            var results = await _announcementService.GetFeed();
+
+            return Ok(results);
         }
 
         [HttpGet("{id}")]
