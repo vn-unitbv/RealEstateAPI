@@ -15,5 +15,6 @@ namespace DataAccess.Entities
         public string LastName { get; set; }
         public UserRole Role { get; set; }
         public virtual IEnumerable<Comment> Comments { get; set; }
+        public virtual IEnumerable<Announcement> Announcements { get; set; }
     }
 }
