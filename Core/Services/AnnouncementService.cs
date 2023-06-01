@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Exceptions;
 
 namespace Core.Services
 {
@@ -33,5 +34,34 @@ namespace Core.Services
 
 			return announcement.Id;
 		}
+
+        public async Task DeleteAnnouncement(Guid id)
+        {
+            Announcement announcement = new() { Id = id };
+            await DeleteAnnouncement(announcement);
+        }
+
+        public async Task DeleteAnnouncement(Announcement announcement)
+        {
+            try
+            {
+                _unitOfWork.Announcements.Delete(announcement);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ResourceMissingException($"Announcement with id {announcement.Id} not found");
+            }
+        }
+
+        public async Task<Announcement> GetAnnouncement(Guid id)
+        {
+            var announcement = await _unitOfWork.Announcements.Get(id);
+
+            if (announcement == null)
+                throw new ResourceMissingException($"Announcement with id {id} not found");
+
+			return announcement;
+        }
 	}
 }
