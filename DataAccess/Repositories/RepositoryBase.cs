@@ -32,6 +32,8 @@ namespace DataAccess.Repositories
 
         public void Delete(T entity)
         {
+            if (_dbSet.Entry(entity).State == EntityState.Detached)
+                _dbSet.Attach(entity);
             _dbSet.Remove(entity);
         }
 
