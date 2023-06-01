@@ -39,7 +39,9 @@ public class UnitOfWork
 				+ $"{exception.StackTrace}\n\n";
 
 			Console.Error.WriteLine(errorMessage);
-		}
+
+            throw;
+        }
 	}
 
 	public async Task SaveChangesAsync()
@@ -56,6 +58,8 @@ public class UnitOfWork
 							   + $"{exception.StackTrace}\n\n";
 
 			Console.Error.WriteLine(errorMessage);
-		}
+
+            throw;
+        }
 	}
 }
