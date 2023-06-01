@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Dtos;
+using Core.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Project.Controllers
 {
@@ -6,11 +8,18 @@ namespace Project.Controllers
     [Route("account")]
     public class AccountController : ControllerBase
     {
+        private readonly UserService _userService;
+
+        public AccountController(UserService userService)
+        {
+            _userService = userService;
+        }
 
         [HttpPost("register")]
-        public IActionResult Register()
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerData)
         {
-            throw new NotImplementedException();
+            await _userService.Register(registerData);
+            return Ok();
         }
 
         [HttpPost("login")]
