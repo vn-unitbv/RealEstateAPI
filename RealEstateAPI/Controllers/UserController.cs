@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Project.Controllers
@@ -7,10 +8,18 @@ namespace Project.Controllers
     [Route("user")]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult GetAll()
+        private readonly UserService _userService;
+
+        public UserController(UserService userService)
         {
-            throw new NotImplementedException();
+            _userService = userService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _userService.GetAll();
+            return Ok(users);
         }
 
         [HttpGet("{id}")]
