@@ -1,4 +1,5 @@
 ﻿using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,10 +31,20 @@ namespace Project.Controllers
             return Ok(user);
         }
 
-        [HttpGet("{id}/announcements")]
-        public IActionResult GetAnnouncements()
+
+        /// <summary>
+        /// This function retrieves all the announcements of the logged in user
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("announcements")]
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> GetAnnouncements()
         {
-            throw new NotImplementedException();
+			Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
+
+			var announcements = await _userService.GetAnnouncements(userId);
+
+            return Ok(announcements);
         }
 
         [HttpGet("{id}/comments")]

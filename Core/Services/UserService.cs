@@ -20,12 +20,19 @@ namespace Core.Services
 
         public async Task<List<UserDto>> GetAll()
         {
-            var results = (await _unitOfWork.Users.GetAll()).Select(e => new UserDto()
-            {
-                FirstName = e.FirstName,
-                LastName = e.LastName,
-                Email = e.Email
-            }).ToList();
+            var results = (await _unitOfWork.Users.GetAll())
+                .ToUserDtos()
+                .ToList();
+
+            return results;
+        }
+
+        public async Task<List<FeedAnnouncementDto>> GetAnnouncements(Guid userId)
+        {
+            var results = (await _unitOfWork.Announcements.GetAll())
+                .Where(a => a.PosterId == userId)
+                .ToFeedAnnouncementDtos()
+                .ToList();
 
             return results;
         }
