@@ -289,6 +289,68 @@ Implementation details
 Technologies used
 \end_layout
 
+\begin_layout Standard
+Our tech stack is almost entirely Microsoft:
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Visual Studio
+\emph default
+ as IDE
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+.NET Core
+\emph default
+ as development platform
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+C#
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+ASP.NET Core
+\emph default
+ as the web framework
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Entity Framework Core
+\emph default
+ as the object-relational mapper for database interaction
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+SQL Server
+\emph default
+ as the database management system
+\end_layout
+
+\begin_layout Standard
+We also use 
+\emph on
+Swagger
+\emph default
+ for interactive API testing, through the 
+\emph on
+Swashbuckle
+\emph default
+ NuGet packages.
+\end_layout
+
 \begin_layout Section
 Database schema
 \end_layout
@@ -315,16 +377,54 @@ Solution structure
 \end_layout
 
 \begin_layout Standard
+We implemented a 3-layer architecture as is common for web apps of this
+ size.
+ Our Visual Studio solution is structured in 4 projects: 
+\family typewriter
+Infrastructure
+\family default
+, 
+\family typewriter
+DataAccess
+\family default
+, 
+\family typewriter
+Core
+\family default
+, 
+\family typewriter
+Project
+\family default
+.
+ With this, we tried to ensure a clean separation between the different
+ concerns of the application.
+ The dependencies between the projects is shown on 
 \begin_inset Note Note
 status open
 
 \begin_layout Plain Layout
-3 projects, their folders, maybe even the files inside them
+insert figure
 \end_layout
 
 \end_inset
 
+.
+\end_layout
 
+\begin_layout Subsection
+DataAccess
+\end_layout
+
+\begin_layout Subsection
+Core
+\end_layout
+
+\begin_layout Subsection
+Project
+\end_layout
+
+\begin_layout Subsection
+Infrastructure
 \end_layout
 
 \begin_layout Section
