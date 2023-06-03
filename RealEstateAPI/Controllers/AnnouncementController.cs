@@ -79,15 +79,24 @@ namespace Project.Controllers
         }
 
         [HttpGet("{id}/comments")]
-        public IActionResult GetComments()
+        [AllowAnonymous]
+        public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
-            throw new NotImplementedException();
+	        var comments = await _announcementService.GetComments(id);
+
+	        return Ok(comments);
         }
 
         [HttpPost("{id}/comments")]
-        public IActionResult AddComment()
+        public async Task<IActionResult> AddComment([FromRoute] Guid id, [FromBody] AddCommentDto commentDto)
         {
-            throw new NotImplementedException();
+			Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
+
+			var announcement = await _announcementService.GetAnnouncement(id);
+
+            var commentId = await _announcementService.AddComment(commentDto, announcement, userId);
+
+            return Ok(new {Id = commentId});
         }
 
         [HttpDelete("{id}/comments/{commentId}")]

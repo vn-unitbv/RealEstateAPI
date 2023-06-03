@@ -81,5 +81,31 @@ namespace Core.Services
 
             return announcement;
         }
+
+        public async Task<Guid> AddComment(AddCommentDto commentDto, Announcement announcement, Guid userId)
+        {
+	        var comment = commentDto.ToComment();
+	        comment.Poster = new User { Id = userId };
+	        comment.Announcement = announcement;
+	        var currentDateTime = DateTime.UtcNow;
+	        comment.CreateDate = currentDateTime;
+
+			_unitOfWork.Comments.Add(comment);
+            await _unitOfWork.SaveChangesAsync();
+
+            return comment.Id;
+        }
+
+        public async Task<List<CommentDto>> GetComments(Guid id)
+        {
+            // I am calling this function so that it throws if no announcement is found
+	        var announcement = await GetAnnouncement(id);
+
+	        var results = (await _unitOfWork.Comments.GetCommentsByAnnouncement(id))
+		        .ToCommentDtos()
+		        .ToList();
+
+            return results;
+        }
 	}
 }
