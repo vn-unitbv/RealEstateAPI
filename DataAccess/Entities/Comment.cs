@@ -7,5 +7,7 @@ namespace DataAccess.Entities
         public virtual User? Poster { get; set; }
         public virtual Announcement Announcement { get; set; }
         public string Message { get; set; }
+
+        public DateTime CreateDate { get; set; }
     }
 }
