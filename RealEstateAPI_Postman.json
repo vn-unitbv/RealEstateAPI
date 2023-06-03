@@ -1,0 +1,360 @@
+{
+	"info": {
+		"_postman_id": "12ba9ad2-f60b-4184-9863-17467fc2e322",
+		"name": "RealEstateAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27124669"
+	},
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"token\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"string\",\r\n    \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5047/account/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"account",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"string\",\r\n    \"lastName\": \"string\",\r\n    \"email\": \"pista\",\r\n    \"password\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5047/account/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"account",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Announcement",
+			"item": [
+				{
+					"name": "Comments",
+					"item": [
+						{
+							"name": "Get Comments",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5047/announcement/cfc19dec-39b4-4d9e-81c6-08db62abd92b/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5047",
+									"path": [
+										"announcement",
+										"cfc19dec-39b4-4d9e-81c6-08db62abd92b",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Comment",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"commentMessage\": \"string\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:5047/announcement/cfc19dec-39b4-4d9e-81c6-08db62abd92b/comments",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5047",
+									"path": [
+										"announcement",
+										"cfc19dec-39b4-4d9e-81c6-08db62abd92b",
+										"comments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Add announcement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"transactionType\": 0,\r\n  \"realEstate\": {\r\n    \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n    \"type\": 0,\r\n    \"roomCount\": 0,\r\n    \"usableSurfaceArea\": 0,\r\n    \"floor\": 0,\r\n    \"constructionYear\": 0,\r\n    \"address\": \"string\"\r\n  },\r\n  \"price\": 0,\r\n  \"postTitle\": \"string\",\r\n  \"postDescription\": \"string\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:5047/announcement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"announcement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete announcement",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5047/announcement/e27d5eec-d854-49d2-01eb-08db62aaa08d",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"announcement",
+								"e27d5eec-d854-49d2-01eb-08db62aaa08d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Feed Announcements",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5047/announcement",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"announcement"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Announcement by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5047/announcement/9198a78b-567e-4fe6-5b10-08db638f3ee8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"announcement",
+								"9198a78b-567e-4fe6-5b10-08db638f3ee8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get User Announcements",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5047/user/announcements",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5047",
+							"path": [
+								"user",
+								"announcements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Comments",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Get all users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5047/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5047",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"",
+					""
+				]
+			}
+		}
+	]
+}
