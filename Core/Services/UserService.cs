@@ -29,10 +29,30 @@ namespace Core.Services
 
         public async Task<List<FeedAnnouncementDto>> GetAnnouncements(Guid userId)
         {
-            var results = (await _unitOfWork.Announcements.GetAll())
+			var user = await _unitOfWork.Users.Get(userId);
+			if (user == null)
+				throw new ResourceMissingException($"User with id {userId} doesn't exist");
+
+
+            //TODO: Write the filtering logic in the repository to improve efficiency (less data over network)
+			var results = (await _unitOfWork.Announcements.GetAll())
                 .Where(a => a.PosterId == userId)
                 .ToFeedAnnouncementDtos()
                 .ToList();
+
+            return results;
+        }
+
+        public async Task<List<CommentDto>> GetComments(Guid userId)
+        {
+	        var user = await _unitOfWork.Users.Get(userId);
+	        if (user == null)
+		        throw new ResourceMissingException($"User with id {userId} doesn't exist");
+
+			var results = (await _unitOfWork.Comments.GetAll())
+		        .Where(c => c.Poster.Id == userId)
+		        .ToCommentDtos()
+		        .ToList();
 
             return results;
         }
@@ -60,7 +80,7 @@ namespace Core.Services
             };
 
             _unitOfWork.Users.Add(user);
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<string?> Validate(LoginDto payload)

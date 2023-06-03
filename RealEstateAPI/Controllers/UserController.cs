@@ -47,10 +47,16 @@ namespace Project.Controllers
             return Ok(announcements);
         }
 
-        [HttpGet("{id}/comments")]
-        public IActionResult GetComments()
+        [HttpGet("comments")]
+        public async Task<IActionResult> GetComments()
         {
-            throw new NotImplementedException();
+	        Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
+
+
+            // TODO: Filter in repository
+	        var comments = await _userService.GetComments(userId);
+
+            return Ok(comments);
         }
     }
 }
