@@ -1,6 +1,7 @@
 ﻿using Core.Dtos;
 using Core.Services;
 using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,11 +38,5 @@ namespace Project.Controllers
 
 			return Ok(new { token = jwtToken });
 		}
-
-		[HttpPost("logout")]
-		public IActionResult Logout()
-		{
-			throw new NotImplementedException();
-		}
-	}
+    }
 }
