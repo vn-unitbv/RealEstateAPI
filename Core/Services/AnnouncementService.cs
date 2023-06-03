@@ -74,5 +74,12 @@ namespace Core.Services
 
 			return announcement;
         }
+
+        public async Task<DetailedAnnouncementDto> GetDetailedAnnouncement(Guid id)
+        {
+	        var announcement = (await GetAnnouncement(id)).ToDetailedAnnouncementDto();
+
+            return announcement;
+        }
 	}
 }

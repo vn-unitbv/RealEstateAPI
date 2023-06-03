@@ -1,15 +1,14 @@
 ﻿using Core.Dtos;
 using Core.Services;
+using DataAccess.Enums;
+using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using DataAccess.Enums;
-using System;
-using Infrastructure.Exceptions;
 
 namespace Project.Controllers
 {
-    [ApiController]
+	[ApiController]
     [Route("announcement")]
     [Authorize]
     public class AnnouncementController : ControllerBase
@@ -31,9 +30,12 @@ namespace Project.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get()
+        [AllowAnonymous]
+        public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-            throw new NotImplementedException();
+	        var result = await _announcementService.GetDetailedAnnouncement(id);
+
+	        return Ok(result);
         }
 
         [HttpPost]
