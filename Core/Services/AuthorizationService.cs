@@ -66,6 +66,7 @@ namespace Core.Services
                 ValidateLifetime = true,
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
+                ClockSkew = TimeSpan.Zero
             };
 
             if (!jwtTokenHandler.CanReadToken(tokenString.Replace("Bearer ", string.Empty)))
