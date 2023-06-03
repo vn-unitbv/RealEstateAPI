@@ -174,5 +174,162 @@ Users have a large variety of operations they can choose from.
  is uploaded and persisted in the database (More in User Roles).
 \end_layout
 
+\begin_layout Part
+Features
+\end_layout
+
+\begin_layout Standard
+This part aims to document all the implemented features as seen by the end
+ user of the API.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Include only publicly seen information, no implementation details
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Authentication & authorization
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Authentication type (JWT token), what's the authentication (login) endpoint,
+ what's the register endpoint.
+ Probably gonna be a short section
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Endpoints
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Itemize
+Include every endpoint sectioned by the controller it's part of (UserController,
+ AccountController, AnnouncementController).
+\end_layout
+
+\begin_layout Itemize
+For every endpoint include:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Short description
+\end_layout
+
+\begin_layout Itemize
+Who is authorized to use the endpoint
+\end_layout
+
+\begin_layout Itemize
+Params, their data type and where they are found (route, query or body),
+ short description of what they represent
+\end_layout
+
+\begin_layout Itemize
+What it returns
+\end_layout
+
+\begin_layout Itemize
+Possible errors
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+See whether a linear listing of endpoints or tabular form looks better
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Data types
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Custom data types (DTOs) used as endpoint params and returns types
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Implementation details
+\end_layout
+
+\begin_layout Section
+Technologies used
+\end_layout
+
+\begin_layout Section
+Database schema
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Itemize
+Generated using EF Core migrations
+\end_layout
+
+\begin_layout Itemize
+include schema diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Solution structure
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+3 projects, their folders, maybe even the files inside them
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Difficulties
+\end_layout
+
 \end_body
 \end_document
