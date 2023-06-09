@@ -30,6 +30,14 @@ namespace Infrastructure.Middleware
             {
                 await RespondToExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message, ex);
             }
+            catch(EmailAlreadyRegisteredException ex)
+            {
+                await RespondToExceptionAsync(context, HttpStatusCode.Conflict, ex.Message, ex);
+            }
+            catch(InvalidEmailFormatException ex)
+            {
+                await RespondToExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message, ex);
+            }
             catch (Exception ex)
             {
                 await RespondToExceptionAsync(context, HttpStatusCode.InternalServerError, "Internal Server Error", ex);
