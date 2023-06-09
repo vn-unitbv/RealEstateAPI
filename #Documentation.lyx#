@@ -1,0 +1,447 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+RealEstateAPI
+\end_layout
+
+\begin_layout Author
+Balogh Szilárd, Vitályos Norbert, Opra-Bódi Botond
+\end_layout
+
+\begin_layout Part
+Introduction
+\end_layout
+
+\begin_layout Standard
+The following documentation contains a comprehensive description of our
+ Web API project for the "Dezvoltarea Aplicațiilor Web și Mobile cu Angular,
+ .Net si Android" course within the Faculty of Mathematics & Informatics,
+ University of Transilvania.
+ It aims to provide an overview of the project's goals, architecture, implementa
+tion details, and instructions on how to use the project, while also discussing
+ the difficulties that arose during the development process.
+ In the following sections, we will explore each aspect of our project in
+ detail, providing step-by-step instructions, code snippets, and any additional
+ information necessary to understand and utilize the project effectively.
+\end_layout
+
+\begin_layout Section
+Motivation
+\end_layout
+
+\begin_layout Standard
+RealEstateAPI is a University Project.
+ That's why it is not intended for any real-world use, outside the scope
+ of the course.
+ The goal of this project isn't to develop something new, but to learn more
+ in depth about backend and API development, CRUD applications and working
+ in a team.
+ That's why one of our biggest priorities was to utilize technologies that
+ facillitate the development process and let the developer team work together
+ effectively.
+ We used widely accepted coding practices that improve code quality and
+ readability, while also paying special attention to efficiency, ease of
+ use and intuitive design.
+\end_layout
+
+\begin_layout Section
+Topic
+\end_layout
+
+\begin_layout Subsection
+What is RealEstateAPI?
+\end_layout
+
+\begin_layout Standard
+RealEstateAPI is a Web API that uses technologies like ASP.NET Core for backend
+ development, Entity Framework Core for seamless integration and querying
+ of the database, and Microsoft SQL Server for storing information in a
+ database (More in Technologies Used section).
+ RealEstateAPI is an Announcement-based API, meaning that, the central elements
+ are constituted by Announcements.
+ These are containers of information, offering details about users, uploaded
+ Real Estates and comments.
+ 
+\end_layout
+
+\begin_layout Subsection
+Brief Walkthrough of RealEstateAPI
+\end_layout
+
+\begin_layout Standard
+RealEstateAPI can be accessed without authenticating, "Guests" (Anonymous
+ users) being able to view the announcement feed, filter announcements,
+ and view details about specific announcements.
+ Other actions require authentication.
+ Adding an announcement, for example, requires a user account to be created,
+ so that the uploaders of the announcements can be identified.
+ This can easily be done by our AccountController's Register and Login endpoints.
+ 
+\end_layout
+
+\begin_layout Standard
+After logging in, the user receives a token, that is necessary for some
+ operations, like adding or deleting announcements, sending comments, etc.
+ (More in Security).
+ It is important to note, that during the development of RealEstateAPI our
+ first priority was security.
+ That's why we used different technologies to make sure that all users can
+ safely and securely enter their information, without ever worrying about
+ it being stolen (More in Database Development and Technologies Used).
+\end_layout
+
+\begin_layout Standard
+Users have a large variety of operations they can choose from.
+ These include viewing the announcement feed, filtering announcements, adding
+ and deleting announcements, sending comments (More in Endpoints).
+ Moreover, we also included an Administrator Role, who is able to access,
+ modify or delete announcements and comments, so that no inappropriate content
+ is uploaded and persisted in the database (More in User Roles).
+\end_layout
+
+\begin_layout Part
+Features
+\end_layout
+
+\begin_layout Standard
+This part aims to document all the implemented features as seen by the end
+ user of the API.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Include only publicly seen information, no implementation details
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Authentication & authorization
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Authentication type (JWT token), what's the authentication (login) endpoint,
+ what's the register endpoint.
+ Probably gonna be a short section
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Endpoints
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Itemize
+Include every endpoint sectioned by the controller it's part of (UserController,
+ AccountController, AnnouncementController).
+\end_layout
+
+\begin_layout Itemize
+For every endpoint include:
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Short description
+\end_layout
+
+\begin_layout Itemize
+Who is authorized to use the endpoint
+\end_layout
+
+\begin_layout Itemize
+Params, their data type and where they are found (route, query or body),
+ short description of what they represent
+\end_layout
+
+\begin_layout Itemize
+What it returns
+\end_layout
+
+\begin_layout Itemize
+Possible errors
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+See whether a linear listing of endpoints or tabular form looks better
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Data types
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Custom data types (DTOs) used as endpoint params and returns types
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part
+Implementation details
+\end_layout
+
+\begin_layout Section
+Technologies used
+\end_layout
+
+\begin_layout Standard
+Our tech stack is almost entirely Microsoft:
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Visual Studio
+\emph default
+ as IDE
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+.NET Core
+\emph default
+ as development platform
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+C#
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+ASP.NET Core
+\emph default
+ as the web framework
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+Entity Framework Core
+\emph default
+ as the object-relational mapper for database interaction
+\end_layout
+
+\begin_layout Itemize
+
+\emph on
+SQL Server
+\emph default
+ as the database management system
+\end_layout
+
+\begin_layout Standard
+We also use 
+\emph on
+Swagger
+\emph default
+ for interactive API testing, through the 
+\emph on
+Swashbuckle
+\emph default
+ NuGet packages.
+\end_layout
+
+\begin_layout Section
+Database schema
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Itemize
+Generated using EF Core migrations
+\end_layout
+
+\begin_layout Itemize
+include schema diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Solution structure
+\end_layout
+
+\begin_layout Standard
+We implemented a 3-layer architecture as is common for web apps of this
+ size.
+ Our Visual Studio solution is structured in 4 projects: 
+\family typewriter
+Infrastructure
+\family default
+, 
+\family typewriter
+DataAccess
+\family default
+, 
+\family typewriter
+Core
+\family default
+, 
+\family typewriter
+Project
+\family default
+.
+ With this, we tried to ensure a clean separation between the different
+ concerns of the application.
+ The dependencies between the projects is shown on 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+insert figure
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+DataAccess
+\end_layout
+
+\begin_layout Subsection
+Core
+\end_layout
+
+\begin_layout Subsection
+Project
+\end_layout
+
+\begin_layout Subsection
+Infrastructure
+\end_layout
+
+\begin_layout Standard
+In the infrastructure project, there are two folders: Exceptions and Middlewares.
+ These two are closely related as the only middleware we implemented is
+ the one responsible for handling all the exceptions.
+ For the exception-handling middleware to work, we had to configure the
+ Program.cs file accordingly.
+ The exceptions we created include EmailAlreadyRegisteredException, InvalidEmail
+FormatException, ForbiddenException, and ResourceMissingException.
+ Thanks to the middleware, we can handle all the exceptions that occur in
+ one centralized file.
+\end_layout
+
+\begin_layout Section
+Difficulties
+\end_layout
+
+\end_body
+\end_document
