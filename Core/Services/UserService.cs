@@ -4,6 +4,7 @@ using DataAccess;
 using Infrastructure.Exceptions;
 using Core.Extensions;
 using DataAccess.Enums;
+using System.Text.RegularExpressions;
 
 namespace Core.Services
 {
@@ -17,7 +18,6 @@ namespace Core.Services
             _unitOfWork = unitOfWork;
             _authService = authService;
         }
-
         public async Task<List<UserDto>> GetAll()
         {
             var results = (await _unitOfWork.Users.GetAll())
@@ -65,11 +65,32 @@ namespace Core.Services
 
             return user.ToUserDto();
         }
-
+        private async Task<bool> IsEmailTaken(string email)
+        {
+            List<UserDto> users = await GetAll();
+            HashSet<string> emails = new HashSet<string>();
+            foreach (var user in users)
+            {
+                emails.Add(user.Email);
+            }
+            return emails.Contains(email);
+        }
+        private bool IsEmailValid(string email)
+        {
+            string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+            return Regex.IsMatch(email, emailPattern);
+        }
         public async Task Register(RegisterDto registerData)
         {
+            if (await IsEmailTaken(registerData.Email))
+            {
+                throw new EmailAlreadyRegisteredException(registerData.Email);
+            }
+            if (!IsEmailValid(registerData.Email))
+            {
+                throw new InvalidEmailFormatException(registerData.Email);
+            }
             var hashedPassword = _authService.HashPassword(registerData.Password);
-
             var user = new User
             {
                 FirstName = registerData.FirstName,
