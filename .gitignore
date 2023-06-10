@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /RealEstateAPI/appsettings.Development.json
 /DataAccess/appsettings.Development.json
+*.lyx#
