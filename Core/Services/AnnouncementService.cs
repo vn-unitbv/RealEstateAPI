@@ -4,9 +4,11 @@ using DataAccess.Entities;
 using DataAccess;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Enums;
 using Infrastructure.Exceptions;
 using Core.Extensions;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -21,40 +23,53 @@ namespace Core.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter)
+        public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter, AnnouncementSortDto? sort)
         {
-            var results = (await _unitOfWork.Announcements.GetAll())
-                .ToFeedAnnouncementDtos();
+            var results = await _unitOfWork.Announcements.GetAll() as IEnumerable<Announcement>;
 
             if (filter.TransactionType.HasValue)
-            {
                 results = results.Where(a => a.TransactionType == filter.TransactionType);
-            }
             if (filter.MaxPrice.HasValue)
-            {
                 results = results.Where(a => a.Price <= filter.MaxPrice.Value);
-            }
             if (filter.MinPrice.HasValue)
-            {
                 results = results.Where(a => a.Price >= filter.MinPrice.Value);
-            }
             if (filter.MinUsableSurfaceArea.HasValue)
-            {
-                results = results.Where(a => a.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
-            }
+                results = results.Where(a => a.RealEstate.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
             if (filter.MaxUsableSurfaceArea.HasValue)
-            {
-                results = results.Where(a => a.UsableSurfaceArea <= filter.MaxUsableSurfaceArea.Value);
-            }
+                results = results.Where(a => a.RealEstate.UsableSurfaceArea <= filter.MaxUsableSurfaceArea.Value);
             if (filter.MaxRoomCount.HasValue)
-            {
-                results = results.Where(a => a.RoomCount <= filter.MaxRoomCount);
-            }
+                results = results.Where(a => a.RealEstate.RoomCount <= filter.MaxRoomCount);
             if (filter.MinRoomCount.HasValue)
+                results = results.Where(a => a.RealEstate.RoomCount >= filter.MinRoomCount);
+
+            if (sort != null)
             {
-                results = results.Where(a => a.RoomCount >= filter.MinRoomCount);
+                switch (sort.Criterion)
+                {
+                    case AnnouncementSortCriterion.Price:
+                        results = results.OrderBy(a => a.Price);
+                        break;
+                    case AnnouncementSortCriterion.ConstructionYear:
+                        results = results.OrderBy(a => a.RealEstate.ConstructionYear);
+                        break;
+                    case AnnouncementSortCriterion.RoomCount:
+                        results = results.OrderBy(a => a.RealEstate.RoomCount);
+                        break;
+                    case AnnouncementSortCriterion.UsableSurfaceArea:
+                        results = results.OrderBy(a => a.RealEstate.UsableSurfaceArea);
+                        break;
+                    case AnnouncementSortCriterion.CreatedDate:
+                        results = results.OrderBy(a => a.CreatedDate);
+                        break;
+                    default:
+                        break;
+                }
+
+                if (sort.Direction == SortDirection.Descending)
+                    results = results.Reverse();
             }
-            return results.ToList();
+
+            return results.ToFeedAnnouncementDtos().ToList();
         }
 
         public async Task<Guid> AddAnnouncement(AddAnnouncementDto data, Guid userId)
