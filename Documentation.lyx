@@ -356,6 +356,10 @@ Database schema
 \end_layout
 
 \begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
 \begin_inset Note Note
 status open
 
@@ -425,6 +429,18 @@ Project
 
 \begin_layout Subsection
 Infrastructure
+\end_layout
+
+\begin_layout Standard
+In the infrastructure project, there are two folders: Exceptions and Middlewares.
+ These two are closely related as the only middleware we implemented is
+ the one responsible for handling all the exceptions.
+ For the exception-handling middleware to work, we had to configure the
+ Program.cs file accordingly.
+ The exceptions we created include EmailAlreadyRegisteredException, InvalidEmail
+FormatException, ForbiddenException, and ResourceMissingException.
+ Thanks to the middleware, we can handle all the exceptions that occur in
+ one centralized file.
 \end_layout
 
 \begin_layout Section
