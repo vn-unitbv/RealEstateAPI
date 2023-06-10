@@ -22,9 +22,9 @@ namespace Project.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll([FromQuery] AnnouncementFilterDto filter, [FromQuery] AnnouncementSortDto sort)
+        public async Task<IActionResult> GetAll([FromQuery] AnnouncementFilterDto filter, [FromQuery] AnnouncementSortDto sort, [FromQuery] int? page)
         {
-            var results = await _announcementService.GetFeed(filter, sort);
+            var results = await _announcementService.GetFeed(filter, sort, page);
 
             return Ok(results);
         }

@@ -23,7 +23,7 @@ namespace Core.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter, AnnouncementSortDto? sort)
+        public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter, AnnouncementSortDto? sort, int? page)
         {
             var results = await _unitOfWork.Announcements.GetAll() as IEnumerable<Announcement>;
 
@@ -33,6 +33,8 @@ namespace Core.Services
                 results = results.Where(a => a.Price <= filter.MaxPrice.Value);
             if (filter.MinPrice.HasValue)
                 results = results.Where(a => a.Price >= filter.MinPrice.Value);
+            if(filter.Type.HasValue)
+                results = results.Where(a => a.RealEstate.Type == filter.Type);
             if (filter.MinUsableSurfaceArea.HasValue)
                 results = results.Where(a => a.RealEstate.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
             if (filter.MaxUsableSurfaceArea.HasValue)
@@ -42,31 +44,39 @@ namespace Core.Services
             if (filter.MinRoomCount.HasValue)
                 results = results.Where(a => a.RealEstate.RoomCount >= filter.MinRoomCount);
 
-            if (sort != null)
+            if (sort?.SortCriterion != null)
             {
-                switch (sort.Criterion)
+                switch (sort.SortCriterion)
                 {
-                    case AnnouncementSortCriterion.Price:
-                        results = results.OrderBy(a => a.Price);
-                        break;
-                    case AnnouncementSortCriterion.ConstructionYear:
-                        results = results.OrderBy(a => a.RealEstate.ConstructionYear);
-                        break;
-                    case AnnouncementSortCriterion.RoomCount:
-                        results = results.OrderBy(a => a.RealEstate.RoomCount);
-                        break;
-                    case AnnouncementSortCriterion.UsableSurfaceArea:
-                        results = results.OrderBy(a => a.RealEstate.UsableSurfaceArea);
-                        break;
-                    case AnnouncementSortCriterion.CreatedDate:
-                        results = results.OrderBy(a => a.CreatedDate);
-                        break;
-                    default:
-                        break;
+                case AnnouncementSortCriterion.Price:
+                    results = results.OrderBy(a => a.Price);
+                    break;
+                case AnnouncementSortCriterion.ConstructionYear:
+                    results = results.OrderBy(a => a.RealEstate.ConstructionYear);
+                    break;
+                case AnnouncementSortCriterion.RoomCount:
+                    results = results.OrderBy(a => a.RealEstate.RoomCount);
+                    break;
+                case AnnouncementSortCriterion.UsableSurfaceArea:
+                    results = results.OrderBy(a => a.RealEstate.UsableSurfaceArea);
+                    break;
+                case AnnouncementSortCriterion.CreatedDate:
+                    results = results.OrderBy(a => a.CreatedDate);
+                    break;
+                default:
+                    break;
                 }
 
-                if (sort.Direction == SortDirection.Descending)
+                if (sort.SortDirection == SortDirection.Descending)
                     results = results.Reverse();
+            }
+
+            if (page != null)
+            {
+                if (page <= 0)
+                    page = 1;
+                const int pageSize = 3;
+                results = results.Skip(((int)page - 1) * pageSize).Take(pageSize);
             }
 
             return results.ToFeedAnnouncementDtos().ToList();
