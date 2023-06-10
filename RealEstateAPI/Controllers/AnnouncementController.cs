@@ -56,7 +56,7 @@ namespace Project.Controllers
             Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
             var announcement = await _announcementService.GetAnnouncement(id);
             if (announcement.Poster.Id != userId)
-                throw new ForbiddenException($"Unauthorized to delete announcement with id {id}");
+                throw new ForbiddenException($"Unauthorized to update announcement with id {id}");
             await _announcementService.UpdateAnnouncement(id, announcementDto);
             return Ok();
         }
