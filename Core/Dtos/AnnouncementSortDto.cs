@@ -11,7 +11,7 @@ namespace Core.Dtos
 {
     public class AnnouncementSortDto
     {
-        public AnnouncementSortCriterion SortCriterion { get; set; }
-        public SortDirection SortDirection { get; set; }
+        public AnnouncementSortCriterion? SortCriterion { get; set; }
+        public SortDirection SortDirection { get; set; } = SortDirection.Ascending;
     }
 }
