@@ -1,6 +1,7 @@
 ﻿using Core.Services;
 using DataAccess.Repositories;
 using DataAccess;
+using Newtonsoft.Json.Converters;
 
 namespace Project.Settings
 {
@@ -9,7 +10,8 @@ namespace Project.Settings
 
         public static void Inject(WebApplicationBuilder applicationBuilder)
         {
-            applicationBuilder.Services.AddControllers();
+            applicationBuilder.Services.AddControllers()
+                .AddNewtonsoftJson(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
             applicationBuilder.Services.AddSwaggerGen();
 
             applicationBuilder.Services.AddDbContext<AppDbContext>();
