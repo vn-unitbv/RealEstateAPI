@@ -13,6 +13,7 @@ namespace Project.Settings
             applicationBuilder.Services.AddControllers()
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.Converters.Add(new StringEnumConverter()));
             applicationBuilder.Services.AddSwaggerGen();
+            applicationBuilder.Services.AddSwaggerGenNewtonsoftSupport();
 
             applicationBuilder.Services.AddDbContext<AppDbContext>();
             applicationBuilder.Services.AddScoped<AppDbContext>();
