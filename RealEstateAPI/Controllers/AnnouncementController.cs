@@ -22,9 +22,9 @@ namespace Project.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] AnnouncementFilterDto filter)
         {
-            var results = await _announcementService.GetFeed();
+            var results = await _announcementService.GetFeed(filter);
 
             return Ok(results);
         }
@@ -50,9 +50,15 @@ namespace Project.Controllers
         }
 
         [HttpPatch("{id}")]
-        public IActionResult Update()
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateAnnouncementDto announcementDto)
         {
-            throw new NotImplementedException();
+            Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
+            var announcement = await _announcementService.GetAnnouncement(id);
+            if (announcement.Poster.Id != userId)
+                throw new ForbiddenException($"Unauthorized to delete announcement with id {id}");
+            await _announcementService.UpdateAnnouncement(id, announcementDto);
+            return Ok();
         }
 
         [HttpDelete("{id}")]

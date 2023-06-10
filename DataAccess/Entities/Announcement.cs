@@ -13,7 +13,6 @@ namespace DataAccess.Entities
         public DateTime ModifiedDate { get; set; }
         public string PostTitle { get; set; }
         public string PostDescription { get; set; }
-
         public virtual IEnumerable<Comment> Comments { get; set; }
     }
 }

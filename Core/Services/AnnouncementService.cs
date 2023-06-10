@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Exceptions;
 using Core.Extensions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Core.Services
 {
@@ -20,14 +21,40 @@ namespace Core.Services
 		{
 			_unitOfWork = unitOfWork;
 		}
-
-        // TODO add parameters for filtering
-        public async Task<List<FeedAnnouncementDto>> GetFeed()
+        public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter)
         {
             var results = (await _unitOfWork.Announcements.GetAll())
                 .ToFeedAnnouncementDtos()
                 .ToList();
 
+            if (filter.TransactionType.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.TransactionType == filter.TransactionType);
+            }
+            if (filter.MaxPrice.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.Price <= filter.MaxPrice.Value);
+            }
+            if (filter.MinPrice.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.Price >= filter.MinPrice.Value);
+            }
+            if (filter.MinUsableSurfaceArea.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
+            }
+            if (filter.MaxUsableSurfaceArea.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.UsableSurfaceArea <= filter.MaxUsableSurfaceArea.Value);
+            }
+            if (filter.MaxRoomCount.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.RoomCount <= filter.MaxRoomCount);
+            }
+            if (filter.MinRoomCount.HasValue)
+            {
+                results = (List<FeedAnnouncementDto>)results.Where(a => a.RoomCount >= filter.MinRoomCount);
+            }
             return results;
         }
 
@@ -64,7 +91,36 @@ namespace Core.Services
                 throw new ResourceMissingException($"Announcement with id {announcement.Id} not found");
             }
         }
-
+        public async Task UpdateAnnouncement(Guid id, UpdateAnnouncementDto data)
+        {
+            Announcement announcement = await GetAnnouncement(id);
+            var updatedAnnouncement = data.ToAnnouncement();
+            updatedAnnouncement.Poster = announcement.Poster;
+            updatedAnnouncement.ModifiedDate = DateTime.UtcNow;
+            updatedAnnouncement.CreatedDate = announcement.CreatedDate;
+            updatedAnnouncement.Id = id;
+            if (updatedAnnouncement.Price == 0)
+            {
+                updatedAnnouncement.Price = announcement.Price;
+            }
+            if (updatedAnnouncement.PostTitle == "string")
+            {
+                updatedAnnouncement.PostTitle = announcement.PostTitle;
+            }
+            if (updatedAnnouncement.PostDescription == "string")
+            {
+                updatedAnnouncement.PostDescription = announcement.PostDescription;
+            }
+            try
+            {
+                _unitOfWork.Announcements.Update(updatedAnnouncement);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new ResourceMissingException($"Announcement with id {id} not found");
+            }
+        }
         public async Task<Announcement> GetAnnouncement(Guid id)
         {
             var announcement = await _unitOfWork.Announcements.Get(id);
