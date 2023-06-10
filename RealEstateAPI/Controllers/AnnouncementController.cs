@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Project.Controllers
 {
-	[ApiController]
+    [ApiController]
     [Route("announcement")]
     [Authorize]
     public class AnnouncementController : ControllerBase
@@ -33,9 +33,9 @@ namespace Project.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
-	        var result = await _announcementService.GetDetailedAnnouncement(id);
+            var result = await _announcementService.GetDetailedAnnouncement(id);
 
-	        return Ok(result);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -46,7 +46,7 @@ namespace Project.Controllers
 
             var id = await _announcementService.AddAnnouncement(data, userId);
 
-            return Ok(new { announcementId = id });
+            return CreatedAtAction(nameof(Get), new { id }, null);
         }
 
         [HttpPatch("{id}")]
@@ -88,21 +88,21 @@ namespace Project.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
-	        var comments = await _announcementService.GetComments(id);
+            var comments = await _announcementService.GetComments(id);
 
-	        return Ok(comments);
+            return Ok(comments);
         }
 
         [HttpPost("{id}/comments")]
         public async Task<IActionResult> AddComment([FromRoute] Guid id, [FromBody] AddCommentDto commentDto)
         {
-			Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
+            Guid.TryParse(User.FindFirst("userId")?.Value, out var userId);
 
-			var announcement = await _announcementService.GetAnnouncement(id);
+            var announcement = await _announcementService.GetAnnouncement(id);
 
             var commentId = await _announcementService.AddComment(commentDto, announcement, userId);
 
-            return Ok(new {Id = commentId});
+            return Ok(new { Id = commentId });
         }
 
         [HttpDelete("{id}/comments/{commentId}")]
