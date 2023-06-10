@@ -13,65 +13,64 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Core.Services
 {
-	public class AnnouncementService
-	{
-		private readonly UnitOfWork _unitOfWork;
+    public class AnnouncementService
+    {
+        private readonly UnitOfWork _unitOfWork;
 
-		public AnnouncementService(UnitOfWork unitOfWork)
-		{
-			_unitOfWork = unitOfWork;
-		}
+        public AnnouncementService(UnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         public async Task<List<FeedAnnouncementDto>> GetFeed(AnnouncementFilterDto filter)
         {
             var results = (await _unitOfWork.Announcements.GetAll())
-                .ToFeedAnnouncementDtos()
-                .ToList();
+                .ToFeedAnnouncementDtos();
 
             if (filter.TransactionType.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.TransactionType == filter.TransactionType);
+                results = results.Where(a => a.TransactionType == filter.TransactionType);
             }
             if (filter.MaxPrice.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.Price <= filter.MaxPrice.Value);
+                results = results.Where(a => a.Price <= filter.MaxPrice.Value);
             }
             if (filter.MinPrice.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.Price >= filter.MinPrice.Value);
+                results = results.Where(a => a.Price >= filter.MinPrice.Value);
             }
             if (filter.MinUsableSurfaceArea.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
+                results = results.Where(a => a.UsableSurfaceArea >= filter.MinUsableSurfaceArea.Value);
             }
             if (filter.MaxUsableSurfaceArea.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.UsableSurfaceArea <= filter.MaxUsableSurfaceArea.Value);
+                results = results.Where(a => a.UsableSurfaceArea <= filter.MaxUsableSurfaceArea.Value);
             }
             if (filter.MaxRoomCount.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.RoomCount <= filter.MaxRoomCount);
+                results = results.Where(a => a.RoomCount <= filter.MaxRoomCount);
             }
             if (filter.MinRoomCount.HasValue)
             {
-                results = (List<FeedAnnouncementDto>)results.Where(a => a.RoomCount >= filter.MinRoomCount);
+                results = results.Where(a => a.RoomCount >= filter.MinRoomCount);
             }
-            return results;
+            return results.ToList();
         }
 
-		public async Task<Guid> AddAnnouncement(AddAnnouncementDto data, Guid userId)
-		{
-			var announcement = data.ToAnnouncement();
-			announcement.Poster = new User() { Id = userId };
-			var currentDateTime = DateTime.UtcNow;
-			announcement.CreatedDate = currentDateTime;
-			announcement.ModifiedDate = currentDateTime;
-			announcement.RealEstate.Id = new Guid();
+        public async Task<Guid> AddAnnouncement(AddAnnouncementDto data, Guid userId)
+        {
+            var announcement = data.ToAnnouncement();
+            announcement.Poster = new User() { Id = userId };
+            var currentDateTime = DateTime.UtcNow;
+            announcement.CreatedDate = currentDateTime;
+            announcement.ModifiedDate = currentDateTime;
+            announcement.RealEstate.Id = new Guid();
 
-			_unitOfWork.Announcements.Add(announcement);
-			await _unitOfWork.SaveChangesAsync();
+            _unitOfWork.Announcements.Add(announcement);
+            await _unitOfWork.SaveChangesAsync();
 
-			return announcement.Id;
-		}
+            return announcement.Id;
+        }
 
         public async Task DeleteAnnouncement(Guid id)
         {
@@ -94,32 +93,16 @@ namespace Core.Services
         public async Task UpdateAnnouncement(Guid id, UpdateAnnouncementDto data)
         {
             Announcement announcement = await GetAnnouncement(id);
-            var updatedAnnouncement = data.ToAnnouncement();
-            updatedAnnouncement.Poster = announcement.Poster;
-            updatedAnnouncement.ModifiedDate = DateTime.UtcNow;
-            updatedAnnouncement.CreatedDate = announcement.CreatedDate;
-            updatedAnnouncement.Id = id;
-            if (updatedAnnouncement.Price == 0)
-            {
-                updatedAnnouncement.Price = announcement.Price;
-            }
-            if (updatedAnnouncement.PostTitle == "string")
-            {
-                updatedAnnouncement.PostTitle = announcement.PostTitle;
-            }
-            if (updatedAnnouncement.PostDescription == "string")
-            {
-                updatedAnnouncement.PostDescription = announcement.PostDescription;
-            }
-            try
-            {
-                _unitOfWork.Announcements.Update(updatedAnnouncement);
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw new ResourceMissingException($"Announcement with id {id} not found");
-            }
+            announcement.ModifiedDate = DateTime.UtcNow;
+            if (data.Price != null)
+                announcement.Price = data.Price;
+            if (data.PostTitle != null)
+                announcement.PostTitle = data.PostTitle;
+            if (data.PostDescription != null)
+                announcement.PostDescription = data.PostDescription;
+
+            _unitOfWork.Announcements.Update(announcement);
+            await _unitOfWork.SaveChangesAsync();
         }
         public async Task<Announcement> GetAnnouncement(Guid id)
         {
@@ -128,25 +111,25 @@ namespace Core.Services
             if (announcement == null)
                 throw new ResourceMissingException($"Announcement with id {id} not found");
 
-			return announcement;
+            return announcement;
         }
 
         public async Task<DetailedAnnouncementDto> GetDetailedAnnouncement(Guid id)
         {
-	        var announcement = (await GetAnnouncement(id)).ToDetailedAnnouncementDto();
+            var announcement = (await GetAnnouncement(id)).ToDetailedAnnouncementDto();
 
             return announcement;
         }
 
         public async Task<Guid> AddComment(AddCommentDto commentDto, Announcement announcement, Guid userId)
         {
-	        var comment = commentDto.ToComment();
-	        comment.Poster = new User { Id = userId };
-	        comment.Announcement = announcement;
-	        var currentDateTime = DateTime.UtcNow;
-	        comment.CreateDate = currentDateTime;
+            var comment = commentDto.ToComment();
+            comment.Poster = new User { Id = userId };
+            comment.Announcement = announcement;
+            var currentDateTime = DateTime.UtcNow;
+            comment.CreateDate = currentDateTime;
 
-			_unitOfWork.Comments.Add(comment);
+            _unitOfWork.Comments.Add(comment);
             await _unitOfWork.SaveChangesAsync();
 
             return comment.Id;
@@ -155,13 +138,13 @@ namespace Core.Services
         public async Task<List<CommentDto>> GetComments(Guid id)
         {
             // I am calling this function so that it throws if no announcement is found
-	        var announcement = await GetAnnouncement(id);
+            var announcement = await GetAnnouncement(id);
 
-	        var results = (await _unitOfWork.Comments.GetCommentsByAnnouncement(id))
-		        .ToCommentDtos()
-		        .ToList();
+            var results = (await _unitOfWork.Comments.GetCommentsByAnnouncement(id))
+                .ToCommentDtos()
+                .ToList();
 
             return results;
         }
-	}
+    }
 }
