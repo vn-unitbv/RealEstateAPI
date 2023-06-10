@@ -13,6 +13,16 @@ namespace Core.Extensions
 {
     internal static class AnnouncementMappingExtensions
     {
+        public static Announcement ToAnnouncement(this UpdateAnnouncementDto data) 
+        {
+            Announcement announcement = new()
+            {
+                Price = data.Price,
+                PostTitle = data.PostTitle,
+                PostDescription = data.PostDescription,
+            };
+            return announcement;
+        }
         public static Announcement ToAnnouncement(this AddAnnouncementDto data)
         {
             Announcement announcement = new()
