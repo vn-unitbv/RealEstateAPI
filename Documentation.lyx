@@ -221,6 +221,84 @@ Authentication type (JWT token), what's the authentication (login) endpoint,
 
 \end_layout
 
+\begin_layout Standard
+Authentication and authorization play crucial roles in securing access to
+ resources and ensuring the integrity of the application.
+ Authentication involves verifying the identity of users attempting to access
+ the API, meanwhile, authorization determines the level of access granted
+ to authenticated users.
+ 
+\end_layout
+
+\begin_layout Subsection
+Authentication
+\end_layout
+
+\begin_layout Standard
+In our application, the authentication is realized via the Login and Register
+ endpoints.
+ For registration, we use a data transfer object called 
+\begin_inset Quotes eld
+\end_inset
+
+RegisterDto
+\begin_inset Quotes erd
+\end_inset
+
+, which is passed as a parameter to a function in a class called 
+\begin_inset Quotes eld
+\end_inset
+
+UserService
+\begin_inset Quotes erd
+\end_inset
+
+ (Services layer), which checks if the email is not already taken and if
+ it is formatted correctly.
+ If both conditions are met, a hash function is used to codify the password,
+ a new user object is created based on the DTO, and the newly created user
+ is inserted into the database.
+ 
+\end_layout
+
+\begin_layout Standard
+When a user wants to log in, we first check if the email and password are
+ correct.
+ If the login is successful, a JWT token is sent back to the user.
+ The hashing of the password and the token generation fall within the responsibi
+lity of a service called 
+\begin_inset Quotes eld
+\end_inset
+
+AuthorizationService
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Authorization
+\end_layout
+
+\begin_layout Standard
+Authorization is done via the 
+\begin_inset Quotes eld
+\end_inset
+
+[Authorize]
+\begin_inset Quotes erd
+\end_inset
+
+ attribute used in AnnouncementController.
+ With its help, we can differentiate the operations that can be done by
+ either a regular user or an administrator.
+ For instance, any type of user has the right to view all the announcements,
+ but only a regular user can add new announcements.
+ Furthermore, a regular user is allowed to delete their own announcement,
+ meanwhile, an admin has the right to delete anyone's announcement.
+\end_layout
+
 \begin_layout Section
 Endpoints
 \end_layout
@@ -5672,6 +5750,27 @@ Custom data types (DTOs) used as endpoint params and returns types
 
 \end_layout
 
+\begin_layout Standard
+Throughout our API, we used different kinds of data types, like int, string,
+ DateTime.
+ All of them are presented in the 
+\begin_inset Quotes eld
+\end_inset
+
+Database schema
+\begin_inset Quotes erd
+\end_inset
+
+ section.
+ We also created some custom data types, called DTOs as endpoint parameters
+ and return types.
+ The main purpose of a DTO is to provide a standardized format for exchanging
+ data and to decouple the data representation from the underlying domain
+ model.
+ For example, we created DTOs for logging in and registering, adding comments
+ and announcements etc.
+\end_layout
+
 \begin_layout Part
 Implementation details
 \end_layout
@@ -5763,6 +5862,982 @@ include schema diagram
 
 \end_layout
 
+\begin_layout Standard
+The database was created using EF Core migrations.
+ Migrations are a feature that allows to manage and evolve a database schema
+ over time.
+ We created an initial migration in which we created the Users, Comments
+ and Announcements tables.
+ Later, we used the update command on the time of the creation of a comment.
+ The relationships between the tables are shown in the figure below.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Graphics
+	filename DatabaseScheme.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Data types used in the Database
+\end_layout
+
+\begin_layout Subsubsection
+Data types used in the Users table
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="7" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Field
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the application
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the database
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Id
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Email
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PasswordHash
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+FirstName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+LastName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Role
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+enum
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+real
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Data types used in the Announcements table
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="14" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Field
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the application
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the database
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Id
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+TransactionType
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+enum
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+enum
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+RoomCount
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+UsableSurfaceArea
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+float
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+real
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Floor
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ConstructionYear
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+int
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Address
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Price
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+decimal
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+decimal
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PosterId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CreatedDate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DateTime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+ModifiedDate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DateTime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PostTitle
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Data types used in the Comments table
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Field
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the application
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\series bold
+Data type in the database
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Id
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+PosterId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+AnnouncementId
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Guid
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+uniqueidentifier
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Message
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+string
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nvarchar(MAX)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+CreateDate
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DateTime
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+datetime2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Delete constraints
+\end_layout
+
+\begin_layout Standard
+The delete constraints ensure referential integrity between the tables.
+ When a referenced row in the parent table is deleted, the corresponding
+ rows in the child tables are also deleted.
+ In our database, the delete constraints are given by the foreign key constraint
+s.
+\end_layout
+
+\begin_layout Subsubsection
+Foreign key constraint in the 
+\begin_inset Quotes eld
+\end_inset
+
+Announcements
+\begin_inset Quotes erd
+\end_inset
+
+ table
+\end_layout
+
+\begin_layout Standard
+The foreign key constraint is defined by the PosterId.
+ It references the 
+\begin_inset Quotes eld
+\end_inset
+
+Users
+\begin_inset Quotes erd
+\end_inset
+
+ table and the 
+\begin_inset Quotes eld
+\end_inset
+
+Id
+\begin_inset Quotes erd
+\end_inset
+
+ column as the primary key.
+ When a user is deleted, all the related announcements with the matching
+ 
+\begin_inset Quotes eld
+\end_inset
+
+PosterId
+\begin_inset Quotes erd
+\end_inset
+
+ will be deleted.
+\end_layout
+
+\begin_layout Subsubsection
+Foreign key constraint in the 
+\begin_inset Quotes eld
+\end_inset
+
+Comments
+\begin_inset Quotes erd
+\end_inset
+
+ table
+\end_layout
+
+\begin_layout Standard
+The foreign key constraint is defined by the AnnouncementId.
+ It references the 
+\begin_inset Quotes eld
+\end_inset
+
+Announcements
+\begin_inset Quotes erd
+\end_inset
+
+ table and the 
+\begin_inset Quotes eld
+\end_inset
+
+Id
+\begin_inset Quotes erd
+\end_inset
+
+ column as the primary key.
+ When an announcement is deleted, all the related comments with the matching
+ 
+\begin_inset Quotes eld
+\end_inset
+
+AnnouncementId
+\begin_inset Quotes erd
+\end_inset
+
+ are also deleted.
+\end_layout
+
 \begin_layout Section
 Solution structure
 \end_layout
@@ -5806,8 +6881,235 @@ insert figure
 DataAccess
 \end_layout
 
+\begin_layout Standard
+The data access layer is the one responsible for containing the entities,
+ enums, migrations and repositories.
+ Regarding the entities, the most significant difference compared to the
+ database tables is that we also have a real estate entity.
+ It, however, isn't converted into a separate table in the database, as
+ the real estate is contained by the announcement.
+\end_layout
+
+\begin_layout Standard
+The repositories are responsible for data acces and abstracting away the
+ database-specific details.
+ They provide methods for querying, inserting, updating, and deleting data
+ from the database.
+ In our application, we have repositories for all of our tables, all of
+ which inherit from the 
+\begin_inset Quotes eld
+\end_inset
+
+RepositoryBase
+\begin_inset Quotes erd
+\end_inset
+
+, which is a generic class and includes all of the CRUD operations.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+RepositoryBase
+\begin_inset Quotes erd
+\end_inset
+
+ relies on a database context, which represents the connection to the database.
+ The context is also responsible for managing the database connection, tracking
+ changes, and executing queries.
+\end_layout
+
+\begin_layout Standard
+We also implemented a 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+ class, which is responsible for managing the transactions and coordinating
+ the persistence of changes made to the entities within the application.
+ It exposes properties for accessing all of the repositories within a logical
+ unit of work.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+SaveChanges()
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+SaveChangesAsync()
+\begin_inset Quotes erd
+\end_inset
+
+ methods are responsible for persisting the changes to the database.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+ class holds a reference to the 
+\begin_inset Quotes eld
+\end_inset
+
+AppDbContext
+\begin_inset Quotes erd
+\end_inset
+
+ object, which is injected into the 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+ constructor and shared among the repositories.
+ This ensures that all the repositories within the 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+ work with the same database context, enabling the coordination of changes
+ and transaction management.
+\end_layout
+
 \begin_layout Subsection
 Core
+\end_layout
+
+\begin_layout Standard
+The role of the 
+\begin_inset Quotes eld
+\end_inset
+
+Core
+\begin_inset Quotes erd
+\end_inset
+
+ project is to encapsulate the core business logic, domain models, and services.
+ As such, our 
+\begin_inset Quotes eld
+\end_inset
+
+Core
+\begin_inset Quotes erd
+\end_inset
+
+ project contains all the necessary DTOs and Enums for the services.
+ The DTOs include 
+\begin_inset Quotes eld
+\end_inset
+
+AddAnnouncementDto
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+AddCommentDto
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+LoginDto
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+RegisterDto
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+UserDto
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The enums are used for sorting purposes.
+ We created some extension methods, the main purpose of these is to facilitate
+ the conversion of a regular object to a DTO or vice versa.
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+AnnouncementService
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+UserService
+\begin_inset Quotes erd
+\end_inset
+
+ use a 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+ (described in the above section) through dependency injection.
+ They contain all of the business logic of the application, like filtering
+ the announcements, checking if an email address is valid etc.
+ They are also responsible for retrieving, inserting and modifying data
+ with the help of 
+\begin_inset Quotes eld
+\end_inset
+
+UnitOfWork
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The 
+\begin_inset Quotes eld
+\end_inset
+
+UserService
+\begin_inset Quotes erd
+\end_inset
+
+ also uses an 
+\begin_inset Quotes eld
+\end_inset
+
+AuthorizationService
+\begin_inset Quotes erd
+\end_inset
+
+ for logging in and registering.
+ The authorization is described in the corresponding section.
 \end_layout
 
 \begin_layout Subsection
