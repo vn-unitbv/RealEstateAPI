@@ -207,21 +207,6 @@ Authentication & authorization
 \end_layout
 
 \begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-Authentication type (JWT token), what's the authentication (login) endpoint,
- what's the register endpoint.
- Probably gonna be a short section
-\end_layout
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Standard
 Authentication and authorization play crucial roles in securing access to
  resources and ensuring the integrity of the application.
  Authentication involves verifying the identity of users attempting to access
@@ -301,51 +286,6 @@ Authorization is done via the
 
 \begin_layout Section
 Endpoints
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Itemize
-Include every endpoint sectioned by the controller it's part of (UserController,
- AccountController, AnnouncementController).
-\end_layout
-
-\begin_layout Itemize
-For every endpoint include:
-\end_layout
-
-\begin_deeper
-\begin_layout Itemize
-Short description
-\end_layout
-
-\begin_layout Itemize
-Who is authorized to use the endpoint
-\end_layout
-
-\begin_layout Itemize
-Params, their data type and where they are found (route, query or body),
- short description of what they represent
-\end_layout
-
-\begin_layout Itemize
-What it returns
-\end_layout
-
-\begin_layout Itemize
-Possible errors
-\end_layout
-
-\end_deeper
-\begin_layout Itemize
-See whether a linear listing of endpoints or tabular form looks better
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Subsection*
@@ -5843,23 +5783,6 @@ Swashbuckle
 
 \begin_layout Section
 Database schema
-\end_layout
-
-\begin_layout Standard
-\begin_inset Note Note
-status open
-
-\begin_layout Itemize
-Generated using EF Core migrations
-\end_layout
-
-\begin_layout Itemize
-include schema diagram
-\end_layout
-
-\end_inset
-
-
 \end_layout
 
 \begin_layout Standard
