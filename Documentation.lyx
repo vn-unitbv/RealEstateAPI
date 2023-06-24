@@ -6787,17 +6787,62 @@ Project
 .
  With this, we tried to ensure a clean separation between the different
  concerns of the application.
- The dependencies between the projects is shown on 
-\begin_inset Note Note
-status open
-
-\begin_layout Plain Layout
-insert figure
-\end_layout
+ The dependencies between the projects is shown on Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Dependencies-between-the"
+plural "false"
+caps "false"
+noprefix "false"
 
 \end_inset
 
 .
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Architecture view for RealEstateAPI2.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Dependencies-between-the"
+
+\end_inset
+
+Dependencies between the projects
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
