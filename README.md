@@ -15,6 +15,7 @@ For more details on contributions see *Commits* on the [RealEstateAPI Github Rep
 - Implemented `Register` endpoint in `AccountController`
 - Implemented **Read** endpoints in `UserController`
 - Implemented **Update** endpoints in `AnnouncementController`
+- Implemented filtered announcement feed
 - Created custom `EmailAlreadyRegisteredException` and `InvalidEmailFormatException` to assure correct email formatting and exception handling
 - Contributed to project documentation
 
@@ -41,5 +42,5 @@ For more details on contributions see *Commits* on the [RealEstateAPI Github Rep
 - Improved Database connection efficiency by implementing *lazy loading* of data
 - Implemented *Dtos* for `Announcement` entity and necessary Extension Methods
 - Implemented **Create**, **Update** and **Delete** endpoints in `AnnouncementController` and their corresponding methods in `AnnouncementService`
-- Modified `AnnouncementController` endpoints to enable Sorting and Filtering functionality
+- Modified `AnnouncementController` endpoints to enable Sorting and Pagination functionality
 - Contributed to project documentation
