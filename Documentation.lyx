@@ -5796,8 +5796,34 @@ The database was created using EF Core migrations.
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float figure
+placement t
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Graphics
 	filename DatabaseScheme.png
+	scale 75
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Database schema diagram
+\end_layout
+
+\end_inset
+
+
+\end_layout
 
 \end_inset
 
