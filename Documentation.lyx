@@ -7039,6 +7039,15 @@ AuthorizationService
 Project
 \end_layout
 
+\begin_layout Standard
+This project houses the ASP.NET Core related functionality and is the entry
+ point of the application.
+ It contains controllers which implement endpoints, sets up dependency injection
+ and configures the web API server.
+ The configured services include authentication and authorization, custom
+ middleware, Swagger for testing purposes etc.
+\end_layout
+
 \begin_layout Subsection
 Infrastructure
 \end_layout
